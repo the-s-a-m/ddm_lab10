@@ -118,5 +118,12 @@
 	<classpathentry kind="lib" path="resources/lib/hadoop/lib/httpclient-4.2.5.jar"/>
 	<classpathentry kind="lib" path="resources/lib/mrunit-0.9.0-incubating-hadoop2.jar"/>
 	<classpathentry kind="lib" path="resources/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/commons-logging.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/jackson-core-asl.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/jackson-mapper-asl.jar"/>
+	<classpathentry kind="lib" path="resources/lib/hadoop/client/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
