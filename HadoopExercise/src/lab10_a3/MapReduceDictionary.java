@@ -41,15 +41,18 @@ public class MapReduceDictionary extends Configured implements Tool {
 
 		job.setInputFormatClass(KeyValueTextInputFormat.class);
 		job.setMapperClass(DictionaryMapper.class);
+		//set output key
 		job.setMapOutputKeyClass(Text.class);
+		//set output value
 		job.setMapOutputValueClass(Text.class);
 
 		job.setPartitionerClass(HashPartitioner.class);
 
 		// job.setNumReduceTasks(0);
 		job.setReducerClass(DictionaryReducer.class);
-
+		//set output key
 		job.setOutputKeyClass(Text.class);
+		//set output value
 		job.setOutputValueClass(Text.class);
 
 		job.setOutputFormatClass(TextOutputFormat.class);
@@ -63,9 +66,15 @@ public class MapReduceDictionary extends Configured implements Tool {
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
+	/**
+	 * Creates a mapper with converts Text input to key: Text and DoubleWritable
+	 */
 	public static class DictionaryMapper extends
 			Mapper<Text, Text, Text, Text> {
 
+		/**
+		 * Creates a new mapping for the given text.
+		 */
 		@Override
 		public void map(Text key, Text value, Context context)
 				throws IOException, InterruptedException {
@@ -78,18 +87,26 @@ public class MapReduceDictionary extends Configured implements Tool {
 		}
 	}
 
+	/**
+	 * Creates a reducer to append all elements with the same key.
+	 */
 	public static class DictionaryReducer extends
 			Reducer<Text, Text, Text, Text> {
 
+		/**
+		 * Reduce the keys to a string concatenated.
+		 */
 		@Override
 		public void reduce(Text key, Iterable<Text> values,
 				Context context) throws IOException, InterruptedException {
 
+			//Used StringBuilder to reduce memory footprint
 			StringBuilder sb = new StringBuilder();
 			for (Text val : values) {
 				sb.append("|");
 				sb.append(val);
 			}
+			//Write the created line to the context.
 			context.write(key, new Text(sb.toString()));
 		}
 	}
