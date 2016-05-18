@@ -87,7 +87,7 @@ public class MapReduceProduct extends Configured implements Tool {
 		public void reduce(Text key, Iterable<DoubleWritable> values,
 				Context context) throws IOException, InterruptedException {
 
-			int sum = 0;
+			double sum = 0;
 			for (DoubleWritable val : values) {
 				sum += val.get();
 			}
