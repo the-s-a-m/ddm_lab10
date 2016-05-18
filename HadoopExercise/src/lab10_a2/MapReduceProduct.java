@@ -38,17 +38,21 @@ public class MapReduceProduct extends Configured implements Tool {
 		Job job = Job.getInstance(getConf(), "minimapredwithdefaults");
 		job.setJarByClass(this.getClass());
 
+		//Set Input format
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setMapperClass(CategoryMapper.class);
+		//set output key
 		job.setMapOutputKeyClass(Text.class);
+		//set output value
 		job.setMapOutputValueClass(DoubleWritable.class);
 
 		job.setPartitionerClass(HashPartitioner.class);
 
 		// job.setNumReduceTasks(0);
 		job.setReducerClass(CategoryReducer.class);
-
+		//set output key
 		job.setOutputKeyClass(Text.class);
+		//set output value
 		job.setOutputValueClass(DoubleWritable.class);
 
 		job.setOutputFormatClass(TextOutputFormat.class);
@@ -62,16 +66,23 @@ public class MapReduceProduct extends Configured implements Tool {
 		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
+	/**
+	 * Creates a mapper with converts LongWritable, Text to Key: Text and DoubleWritable
+	 */
 	public static class CategoryMapper extends
 			Mapper<LongWritable, Text, Text, DoubleWritable> {
 
+		/**
+		 * Creates a new mapping for the given text.
+		 */
 		@Override
 		public void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-
+			//Split the content
 			String[] parts = value.toString().split("\t");
 			if (parts.length >= 5) {
 				try {
+					//convert to content and catch errors if needed
 					context.write(new Text(parts[3].trim()),
 							new DoubleWritable(Double.parseDouble(parts[4])));
 				} catch (NumberFormatException e) {
@@ -80,9 +91,15 @@ public class MapReduceProduct extends Configured implements Tool {
 		}
 	}
 
+	/**
+	 * Creates a reducer to sum up all values with the same key.
+	 */
 	public static class CategoryReducer extends
 			Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 
+		/**
+		 * Reduce the keys to the sum of the values.
+		 */
 		@Override
 		public void reduce(Text key, Iterable<DoubleWritable> values,
 				Context context) throws IOException, InterruptedException {
